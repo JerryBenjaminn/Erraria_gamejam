@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4494219236253004354}
   - component: {fileID: 3660134678447999551}
   - component: {fileID: 7847986832069287696}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Corpse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: af2df5a0794d2ee4eac26e2d9065f014, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -131,7 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7217063417143770360}
   - component: {fileID: 2766743432585371849}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
