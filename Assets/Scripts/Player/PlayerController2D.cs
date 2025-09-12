@@ -40,6 +40,14 @@ public class PlayerController2D : MonoBehaviour
     public float sprintExitIdleThreshold = 0.1f; // jos ei liike-inputtia, poistu sprintistä
     public float postDashSprintGrace = 0.25f;    // ikkuna, jonka aikana Shift down aloittaa sprintin
 
+    [Header("Hyppy Apex -tuntuma")]
+    public float apexThreshold = 2.5f;        // nostetaan 2.5 m/s:ään
+    public float apexExtraMultiplier = 1.6f;  // voimakkaampi lisägravita apexissa
+    public float riseMultiplier = 1.15f;      // kevyt lisäpaino jo nousussa
+    public float maxRiseSpeed = 14f;          // sama kuin ennen tai säädä
+
+
+
     public bool isSprinting;
     public float sprintGraceTimer;
     
@@ -177,15 +185,34 @@ public class PlayerController2D : MonoBehaviour
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x + change, rb.linearVelocity.y);
 
-        // Painovoimat kuten ennen...
-        if (rb.linearVelocity.y < -0.01f)
+        // Painovoiman “feel”
+        float vy = rb.linearVelocity.y;
+
+        if (vy < -0.01f)
         {
+            // Pudotus
             rb.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1f) * Time.fixedDeltaTime);
         }
-        else if (rb.linearVelocity.y > 0.01f && !jumpHeld)
+        else if (vy > 0.01f)
         {
-            rb.linearVelocity += Vector2.up * (Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime);
+            // Nouseva vaihe
+            // 1) Perus multipleri: jos ei pidä hyppyä -> leikkaa nousua, muuten kevyt lisäpaino
+            float mult = jumpHeld ? riseMultiplier : lowJumpMultiplier;
+
+            // 2) Apex-boost: kasvaa vy:n lähestyessä nollaa (lineaarinen rampi)
+            //    vy==apexThreshold -> boost 1.0, vy==0 -> boost apexExtraMultiplier
+            float t = Mathf.Clamp01(1f - (vy / Mathf.Max(apexThreshold, 0.0001f)));
+            float apexBoost = Mathf.Lerp(1f, apexExtraMultiplier, t);
+            mult = Mathf.Max(mult, apexBoost);
+
+            rb.linearVelocity += Vector2.up * (Physics2D.gravity.y * (mult - 1f) * Time.fixedDeltaTime);
+
+            // Katkaise liiallinen ylösnousu, jos tarvitsee
+            if (rb.linearVelocity.y > maxRiseSpeed)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, maxRiseSpeed);
         }
+
+
     }
 
     void Jump()

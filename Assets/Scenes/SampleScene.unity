@@ -280,11 +280,11 @@ MonoBehaviour:
   moveSpeed: 7
   acceleration: 200
   deceleration: 80
-  jumpForce: 12
+  jumpForce: 10
   coyoteTime: 0.1
   jumpBufferTime: 0.1
-  fallMultiplier: 4
-  lowJumpMultiplier: 2
+  fallMultiplier: 6
+  lowJumpMultiplier: 4
   groundCheck: {fileID: 1568017699}
   groundCheckRadius: 0.2
   groundMask:
@@ -298,6 +298,10 @@ MonoBehaviour:
   sprintAccel: 100
   sprintExitIdleThreshold: 0.1
   postDashSprintGrace: 1
+  apexThreshold: 7
+  apexExtraMultiplier: 6.3
+  riseMultiplier: 1.15
+  maxRiseSpeed: 15
   isSprinting: 0
   sprintGraceTimer: 0
 --- !u!114 &95438013
@@ -904,6 +908,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07465d3905bbb644cac1bc744dcb1ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &940615630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 940615632}
+  - component: {fileID: 940615631}
+  m_Layer: 0
+  m_Name: CorpseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &940615631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940615630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5a5fa06e0fe7f24cacb7918fe984868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxCorpses: 5
+--- !u!4 &940615632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940615630}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235469583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1210,3 +1259,4 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 95438011}
   - {fileID: 52590299}
+  - {fileID: 940615632}

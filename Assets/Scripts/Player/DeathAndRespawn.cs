@@ -26,19 +26,20 @@ public class DeathAndRespawn : MonoBehaviour
 
     public void Die()
     {
-        // 1) Putoava ruumis
-        if (corpsePrefab != null)
+        if (corpsePrefab)
         {
             var corpse = Instantiate(corpsePrefab, transform.position, Quaternion.identity);
-            var crb = corpse.GetComponent<Rigidbody2D>();
-            if (crb != null)
-            {
-                crb.linearVelocity = rb != null ? rb.linearVelocity : Vector2.zero;
-                StartCoroutine(FreezeCorpseNextFrame(crb));
-            }
-        }
+            if (corpse.TryGetComponent<Rigidbody2D>(out var crb) && rb)
+                crb.linearVelocity = rb.linearVelocity;
 
-        // 2) Respawnaa pelaaja
+            CorpseManager.Instance?.RegisterCorpse(corpse);
+        }
+        RespawnAtSpawn();
+
+    }
+
+    public void RespawnAtSpawn()
+    {
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
@@ -46,6 +47,7 @@ public class DeathAndRespawn : MonoBehaviour
         }
         transform.position = spawnPoint.position;
     }
+
 
     IEnumerator FreezeCorpseNextFrame(Rigidbody2D crb)
     {
