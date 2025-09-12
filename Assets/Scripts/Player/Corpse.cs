@@ -5,6 +5,7 @@ using UnityEngine;
 public class Corpse : MonoBehaviour
 {
     public float freezeDelay = 0.15f;
+    public float weight = 1.0f;
     Rigidbody2D rb;
 
     void Awake() => rb = GetComponent<Rigidbody2D>();
