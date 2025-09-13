@@ -46,6 +46,9 @@ public class PlayerController2D : MonoBehaviour
     public float riseMultiplier = 1.15f;      // kevyt lisäpaino jo nousussa
     public float maxRiseSpeed = 14f;          // sama kuin ennen tai säädä
 
+    [Header("Fysiikka")]
+    public float baseGravity = 1f; // Inspectorissa 1
+
 
 
     public bool isSprinting;
@@ -76,6 +79,7 @@ public class PlayerController2D : MonoBehaviour
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.gravityScale = baseGravity;
     }
 
     void Update()
@@ -183,6 +187,9 @@ public class PlayerController2D : MonoBehaviour
             return;
         }
 
+        if (!isDashing && rb.gravityScale != baseGravity)
+            rb.gravityScale = baseGravity;
+
         rb.linearVelocity = new Vector2(rb.linearVelocity.x + change, rb.linearVelocity.y);
 
         // Painovoiman “feel”
@@ -256,7 +263,7 @@ public class PlayerController2D : MonoBehaviour
     {
         if (!isDashing) return;
         isDashing = false;
-        rb.gravityScale = storedGravityScale;
+        rb.gravityScale = baseGravity;
         rb.linearDamping = storedLinearDrag;
         // Palauta materiaali
         if (col) col.sharedMaterial = null;
