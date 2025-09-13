@@ -49,6 +49,8 @@ public class PlayerController2D : MonoBehaviour
     [Header("Fysiikka")]
     public float baseGravity = 1f; // Inspectorissa 1
 
+    public Animator anim;
+
 
 
     public bool isSprinting;
@@ -155,6 +157,15 @@ public class PlayerController2D : MonoBehaviour
             // Jos ei liike-inputtia, tiputa sprint pois
             if (Mathf.Abs(xInput) <= sprintExitIdleThreshold)
                 isSprinting = false;
+        }
+        if (anim)
+        {
+            bool grounded = IsGrounded;
+            float xSpeed = Mathf.Abs(rb.linearVelocity.x);
+            bool moving = xSpeed > 0.05f; // kuolleen alue pienille tärinöille
+
+            anim.SetBool("IsGrounded", grounded);
+            anim.SetBool("IsMoving", grounded && moving);
         }
 
     }
