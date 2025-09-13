@@ -51,5 +51,8 @@ public class Gun2D : MonoBehaviour
 
         var bullet = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
         bullet.Fire(dir, gameObject);
+
+        SoundManager.PlaySFX("shoot", 0.02f);
+
     }
 }

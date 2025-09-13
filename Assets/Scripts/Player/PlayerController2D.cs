@@ -216,10 +216,11 @@ public class PlayerController2D : MonoBehaviour
     }
 
     void Jump()
-    {
+    {      
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         coyoteCounter = 0f;
+        SoundManager.PlaySFX("jump", 0.05f);
     }
 
     void StartDash()
@@ -246,6 +247,8 @@ public class PlayerController2D : MonoBehaviour
         rb.linearVelocity = new Vector2(dashDir * dashSpeed, 0f);
 
         sprintGraceTimer = 0f; // ei sprinttiä vielä
+
+        SoundManager.PlaySFX("dash", 0.03f);
     }
 
 

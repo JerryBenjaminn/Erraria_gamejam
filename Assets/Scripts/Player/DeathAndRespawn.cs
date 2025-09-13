@@ -33,6 +33,7 @@ public class DeathAndRespawn : MonoBehaviour
                 crb.linearVelocity = rb.linearVelocity;
 
             CorpseManager.Instance?.RegisterCorpse(corpse);
+            SoundManager.PlaySFXAt("corpse_drop", corpse.transform.position, 0.02f);
         }
         RespawnAtSpawn();
 
