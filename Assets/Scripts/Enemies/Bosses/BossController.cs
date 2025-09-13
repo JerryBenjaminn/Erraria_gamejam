@@ -1,4 +1,6 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class BossController : MonoBehaviour
@@ -50,14 +52,22 @@ public class BossController : MonoBehaviour
 
     Rigidbody2D rb;
     Collider2D bodyCol;
+    SpriteRenderer srenderer;
     State state;
     int hp;
     bool facingRight = true;
     float exposeCD;    // ajastettu paljastus
     float stateTimer;  // keston mittaus
+    public TextMeshProUGUI thankText;
+    public TextMeshProUGUI buttonText;
+    public Button button;
 
     void Awake()
     {
+        thankText.enabled = false;
+        button.enabled = false;
+        buttonText.enabled = false;
+        
         rb = GetComponent<Rigidbody2D>();
         bodyCol = GetComponent<Collider2D>();
         rb.gravityScale = 0f;
@@ -118,7 +128,10 @@ public class BossController : MonoBehaviour
                 SetCoreExposed(false);
                 rb.linearVelocity = Vector2.zero;
                 if (shieldCollider) shieldCollider.enabled = false;
-                if (coreHitbox) coreHitbox.enabled = false;
+                Destroy(gameObject);
+                thankText.enabled = true;
+                button.enabled = true;
+                buttonText.enabled = true;
                 break;
         }
     }
