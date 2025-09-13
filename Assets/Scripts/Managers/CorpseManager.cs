@@ -1,6 +1,7 @@
+// CorpseManager.cs
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CorpseManager : MonoBehaviour
 {
@@ -10,58 +11,64 @@ public class CorpseManager : MonoBehaviour
     public int maxCorpses = 5;
     int remainingCorpses;
 
+    public event Action<int, int> OnCorpsesChanged; // (remaining, max)
+
     List<GameObject> activeCorpses = new List<GameObject>();
 
     void Awake()
     {
         if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        else { Destroy(gameObject); return; }
 
         remainingCorpses = maxCorpses;
+        OnCorpsesChanged?.Invoke(remainingCorpses, maxCorpses);
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
-        {
             ResetLevel();
-        }
     }
 
     public void RegisterCorpse(GameObject corpse)
     {
         activeCorpses.Add(corpse);
-        remainingCorpses--;
+        remainingCorpses = Mathf.Max(remainingCorpses - 1, 0);
+        OnCorpsesChanged?.Invoke(remainingCorpses, maxCorpses);
 
         if (remainingCorpses <= 0)
-        {
             ResetLevel();
-        }
     }
 
+    bool isResetting;
     public void ResetLevel()
     {
-        // Poista kaikki ruumiit
-        foreach (var c in activeCorpses)
-        {
-            if (c != null) Destroy(c);
-        }
+        if (isResetting) return;
+        isResetting = true;
+
+        // siivoa ruumiit
+        foreach (var c in activeCorpses) if (c) Destroy(c);
         activeCorpses.Clear();
 
-        // Resetoi counter
         remainingCorpses = maxCorpses;
+        OnCorpsesChanged?.Invoke(remainingCorpses, maxCorpses);
 
-        // Resetoi pelaaja spawnille
         var player = FindFirstObjectByType<DeathAndRespawn>();
         if (player != null)
         {
             player.RespawnAtSpawn();
         }
 
-        // Jos haluat täydellisen resetin (glitchitkin nollautuvat),
-        // voit vaihtoehtoisesti ladata scenen uudelleen:
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // pieni viive ennen kuin sallitaan uudet resetit
+        StartCoroutine(ResetLatch());
+    }
+    System.Collections.IEnumerator ResetLatch()
+    {
+        yield return null;           // 1 frame
+        yield return new WaitForSeconds(0.1f);
+        isResetting = false;
     }
 
     public int GetRemainingCorpses() => remainingCorpses;
+    public int GetMaxCorpses() => maxCorpses;
 }
