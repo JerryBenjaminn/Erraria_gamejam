@@ -17,7 +17,7 @@ public class DeathAndRespawn : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (spawnPoint == null)
         {
-            // Jos et ole asettanut erillist� spawnia, k�yt� aloituspaikkaa
+            // Jos et ole asettanut erillistä spawnia, käytä aloituspaikkaa
             GameObject sp = new GameObject("AutoSpawnPoint");
             sp.transform.position = transform.position;
             spawnPoint = sp.transform;
@@ -48,7 +48,6 @@ public class DeathAndRespawn : MonoBehaviour
         }
         transform.position = spawnPoint.position;
     }
-
 
     IEnumerator FreezeCorpseNextFrame(Rigidbody2D crb)
     {

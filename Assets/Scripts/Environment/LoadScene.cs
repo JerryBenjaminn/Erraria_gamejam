@@ -5,7 +5,7 @@ public class LoadScene : MonoBehaviour
 {
     public void LoadFirstLevel()
     {
-        SceneManager.LoadScene("Level01");
+        SceneManager.LoadScene("Level2");
         SoundManager.PlayLevelMusic();
     }
     public void QuitGame()
